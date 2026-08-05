@@ -54,7 +54,7 @@ export const signInAccount = (email: string, password: string) =>
 export const signOutAccount = () => signOut(auth);
 
 const gameRef = (uid: string) => doc(db, 'players', uid);
-const CURRENT_SCHEMA_VERSION = 4;
+const CURRENT_SCHEMA_VERSION = 5;
 
 export function migrateGameState(raw: GameState): GameState {
   const existing = new Map((raw.inventory ?? []).map((item) => [item.id, item]));
@@ -81,6 +81,8 @@ export function migrateGameState(raw: GameState): GameState {
     activeCreatureId: creatures.some((creature) => creature.id === raw.activeCreatureId) ? raw.activeCreatureId : creatures[0].id,
     discoveries,
     encounterProgress: raw.encounterProgress ?? { mosskit: 0 },
+    forageDate: raw.forageDate ?? '',
+    foragePlays: raw.foragePlays ?? 0,
     lastAction: raw.lastAction?.replace(/glow/gi, 'quest').replace(/Glimmer/gi, 'creature') ?? 'Field record updated.',
   }, now);
 }
