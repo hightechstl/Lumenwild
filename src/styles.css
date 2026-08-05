@@ -53,4 +53,6 @@
   .habitat{height:330px}.needs{padding-top:8px}.care button{min-height:58px}
   .item-row{min-height:48px;padding:5px 8px}.daily{padding:10px}.daily h2{font-size:20px}.region-card{min-height:75px}
 }
+
+@media(min-width:901px) and (min-height:731px){.habitat{height:clamp(370px,calc(100vh - 300px),500px)}}
 .profile-actions{display:flex;gap:10px;align-items:center;margin-top:30px}.profile-actions .danger{margin-top:0}
