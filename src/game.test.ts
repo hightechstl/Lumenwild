@@ -1,0 +1,2 @@
+import {describe,it,expect} from 'vitest'; import {initialState,care,buy,claimDaily} from './game';
+describe('economy and care rules',()=>{it('never overspends',()=>{const s={...initialState(),dewdrops:0};expect(buy(s,'lamp').inventory.find(i=>i.id==='lamp')?.quantity).toBe(0)});it('caps needs',()=>{let s=initialState();for(let i=0;i<10;i++)s=care(s,'feed');expect(s.needs.hunger).toBe(100)});it('pays daily once',()=>{let s={...initialState(),dailyCare:3};s=claimDaily(s);const once=s.dewdrops;expect(claimDaily(s).dewdrops).toBe(once)})});
