@@ -29,7 +29,7 @@ Add `hightechstl.github.io` to Firebase Authentication's authorized domains befo
 
 ## MVP loop
 
-Adopt a Glimmer → care for it → explore Mossmere → play Skyhop or complete a daily glow → spend Dewdrops → equip an item or decorate the nook → earn an achievement.
+Choose a creature → care for it → explore Mossmere → play Skyhop or complete a daily quest → spend Marks → equip an item or decorate the nook → earn an achievement.
 
 Authentication and cloud persistence are live Firebase integrations. Before a public release, currency and inventory mutations must move behind authenticated, server-authoritative Callable Functions and an append-only transaction ledger.
 
