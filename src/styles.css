@@ -14,4 +14,43 @@
 .app-shell{background:#e7ddc7}.scene{border:2px solid #baa986;background:#fff8e8;box-shadow:0 16px 38px #4b3a2929}.habitat{height:500px;background-image:url('/assets/mossmere-habitat.png');background-size:cover;background-position:center;border:7px solid #5d4632;border-radius:10px;box-shadow:inset 0 0 0 2px #d2b975,0 8px 18px #37271e38}.habitat .window,.habitat .shelf,.habitat .plant,.habitat .rug{display:none}.habitat .creature{width:430px;height:390px;bottom:0;filter:drop-shadow(0 16px 10px #2431267d)}.needs{padding:17px 10px 5px;background:#f5ead1;border:1px solid #cfbc95;border-radius:10px;margin-top:13px}.care button{min-height:66px;border:2px solid #ccb88d;border-radius:8px;background:#f8edd4;font-family:'Fraunces',Georgia,serif;font-size:18px;box-shadow:inset 0 0 0 2px #fff8e8}.care button:nth-child(1){background:#e6ead2}.care button:nth-child(2){background:#d3e9e4}.care button:nth-child(3){background:#f2d793}.care button:nth-child(4){background:#ebaa8e}.daily{border:4px double #e3c99c;border-radius:9px;background:#263e3c}.item-row{border-radius:6px;border-color:#baa986}.region-card{border:4px double #dec394;border-radius:8px;background:#3f6656}.today{background:#d9c9a8;padding:10px;border:1px solid #aa9774;border-radius:9px}.app-shell>aside{background:#f5ead2;border-right:2px solid #a99570}.app-shell>aside nav button{border-radius:6px}.app-shell>aside nav button.active{background:#466541;border:2px solid #718262;box-shadow:inset 0 0 0 2px #c6b98f}.content{padding:12px}.home-screen{gap:10px}.scene-top{padding:2px 5px}.scene-top h1{font-size:38px}
 @media(max-width:900px){.auth-page{grid-template-columns:1fr}.auth-story{min-height:44vh;padding:26px}.auth-copy{margin-top:8vh}.auth-copy h1{font-size:47px}.auth-story>img{width:78%;right:-16%;bottom:-44%}.auth-panel{padding:24px}.habitat{height:430px}.today{background:transparent;border:0;padding:0}}
 @media(max-width:600px){.auth-story{min-height:390px}.auth-copy{margin-top:48px}.auth-copy h1{font-size:38px}.auth-copy>p{font-size:15px;max-width:80%}.cloud-note{display:none}.auth-story>img{width:95%;right:-33%;bottom:-30%}.auth-panel{padding:16px}.auth-card{padding:24px}.auth-card h2{font-size:31px}.habitat{height:330px}.habitat .creature{width:300px;height:280px}.needs{padding:12px 5px 4px}.care button{min-height:58px;font-size:14px}}
+
+/* One-screen field-journal composition */
+@media(min-width:901px){
+  .app-shell{grid-template-columns:190px minmax(0,1fr);height:100vh;min-height:680px;overflow:hidden}
+  .content{height:100vh;overflow:auto;padding:10px}
+  .home-screen{grid-template-columns:minmax(620px,1fr) 300px;gap:10px;max-width:1500px;min-height:calc(100vh - 20px)}
+  .scene{padding:12px;border-radius:12px;display:flex;flex-direction:column}
+  .scene-top{min-height:69px;align-items:flex-start}
+  .scene-top p{margin-bottom:0;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+  .scene-top h1{font-size:45px;line-height:.95;margin:5px 0 8px}
+  .wallet span{background:#f5ead1;border:1px solid #cfbc95;border-radius:999px;padding:8px 12px;min-width:112px}
+  .habitat{height:clamp(330px,calc(100vh - 375px),500px);min-height:330px}
+  .habitat .creature{height:min(390px,calc(100vh - 400px));min-height:285px;width:min(430px,42vw)}
+  .needs{margin-top:8px;padding:11px 9px 4px;gap:10px}
+  .care{margin-top:8px}
+  .care button{min-height:68px;font-size:20px;flex-direction:column;gap:3px}
+  .care svg{width:25px;height:25px}
+  .today{padding:8px;gap:7px;min-height:0}
+  .daily{padding:14px;border-radius:7px}
+  .daily p{font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+  .daily h2{font-size:23px}
+  .daily .progress{margin:9px 0 4px}
+  .daily button{margin-top:8px;padding:9px}
+  .today>h3{font-family:'Fraunces',Georgia,serif;text-transform:uppercase;letter-spacing:.08em;text-align:center;font-size:14px;margin:3px 0}
+  .item-row{padding:7px 9px;min-height:55px}
+  .item-row>span{font-size:22px}
+  .destinations{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:auto}
+  .region-card{margin:0;min-height:92px;padding:10px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;position:relative}
+  .region-card span{text-transform:uppercase;letter-spacing:.08em;font-size:10px}
+  .region-card b{font-size:20px}
+  .region-card svg{position:absolute;right:9px;bottom:11px;width:18px}
+  .skyhop-card{background:#b88227;color:#fff8df}
+}
+
+@media(min-width:901px) and (max-height:730px){
+  .scene-top{min-height:58px}.scene-top h1{font-size:36px}
+  .habitat{height:330px}.needs{padding-top:8px}.care button{min-height:58px}
+  .item-row{min-height:48px;padding:5px 8px}.daily{padding:10px}.daily h2{font-size:20px}.region-card{min-height:75px}
+}
 .profile-actions{display:flex;gap:10px;align-items:center;margin-top:30px}.profile-actions .danger{margin-top:0}
