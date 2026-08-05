@@ -18,6 +18,7 @@ import {
   setDoc,
 } from 'firebase/firestore';
 import type { GameState } from './types';
+import { starterCreature } from './game';
 import { seedItems } from './data';
 
 const firebaseConfig = {
@@ -53,18 +54,23 @@ export const signInAccount = (email: string, password: string) =>
 export const signOutAccount = () => signOut(auth);
 
 const gameRef = (uid: string) => doc(db, 'players', uid);
-const CURRENT_SCHEMA_VERSION = 2;
+const CURRENT_SCHEMA_VERSION = 3;
 
 export function migrateGameState(raw: GameState): GameState {
   const existing = new Map((raw.inventory ?? []).map((item) => [item.id, item]));
   const achievements = (raw.achievements ?? []).map((name) =>
     name === 'A Little Brighter' ? 'Field Routine' : name === 'First Light' ? 'First Companion' : name,
   );
+  const creatures = raw.creatures?.length ? raw.creatures : [starterCreature(raw.species, raw.creatureName, raw.needs?.bond ?? 81)];
   return {
     ...raw,
     inventory: seedItems.map((seed) => ({ ...seed, quantity: existing.get(seed.id)?.quantity ?? seed.quantity })),
     equipped: raw.equipped ?? [],
     achievements: [...new Set(achievements)],
+    creatures,
+    activeCreatureId: creatures.some((creature) => creature.id === raw.activeCreatureId) ? raw.activeCreatureId : creatures[0].id,
+    discoveries: raw.discoveries?.length ? raw.discoveries : ['mosskit'],
+    encounterProgress: raw.encounterProgress ?? { mosskit: 0 },
     lastAction: raw.lastAction?.replace(/glow/gi, 'quest').replace(/Glimmer/gi, 'creature') ?? 'Field record updated.',
   };
 }
