@@ -55,4 +55,7 @@
 }
 
 @media(min-width:901px) and (min-height:731px){.habitat{height:clamp(370px,calc(100vh - 300px),500px)}}
+
+/* Grounded expedition tone */
+.mark span{color:#a36f2c}.scene-top p,.page header p{color:#35655f}.daily{background:#293f3d}.today{background:#cbbd9f}.needs svg{color:#87613a}.care button{font-family:'DM Sans',system-ui,sans-serif;color:#fffaf0;border-color:#5c5747;box-shadow:inset 0 0 0 1px #ffffff29}.care button:nth-child(1){background:#526648}.care button:nth-child(2){background:#3f6663}.care button:nth-child(3){background:#98732f}.care button:nth-child(4){background:#8a503d}.care button:hover{filter:brightness(1.08);background-color:inherit}.care svg{color:#fff4d6}.skyhop-card{background:#806120}.starter i{border-radius:5px}.primary{border-radius:7px}
 .profile-actions{display:flex;gap:10px;align-items:center;margin-top:30px}.profile-actions .danger{margin-top:0}

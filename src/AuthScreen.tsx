@@ -41,10 +41,10 @@ export function AuthScreen() {
         <div className="auth-brand"><Sparkles /> Lumenwild</div>
         <div className="auth-copy">
           <h1>Your little light,<br />wherever you wander.</h1>
-          <p>Care for a Glimmer, explore the Bramblewake wilds, and return to the same growing world on any device.</p>
+          <p>Raise a creature, explore the Bramblewake wilds, and build a persistent world you can return to on any device.</p>
           <div className="cloud-note"><Cloud /><span><b>Saved with Firebase</b>Your creature, collection, and nook follow your account.</span></div>
         </div>
-        <img src={`${import.meta.env.BASE_URL}assets/starters.png`} alt="Three Lumenwild Glimmers" />
+        <img src={`${import.meta.env.BASE_URL}assets/starters.png`} alt="Three Lumenwild creatures" />
       </section>
       <section className="auth-panel">
         <div className="auth-card">
