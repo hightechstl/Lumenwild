@@ -18,7 +18,7 @@ import {
   setDoc,
 } from 'firebase/firestore';
 import type { GameState } from './types';
-import { starterCreature } from './game';
+import { recoverState, starterCreature } from './game';
 import { seedItems } from './data';
 
 const firebaseConfig = {
@@ -54,17 +54,25 @@ export const signInAccount = (email: string, password: string) =>
 export const signOutAccount = () => signOut(auth);
 
 const gameRef = (uid: string) => doc(db, 'players', uid);
-const CURRENT_SCHEMA_VERSION = 3;
+const CURRENT_SCHEMA_VERSION = 4;
 
 export function migrateGameState(raw: GameState): GameState {
   const existing = new Map((raw.inventory ?? []).map((item) => [item.id, item]));
   const achievements = (raw.achievements ?? []).map((name) =>
     name === 'A Little Brighter' ? 'Field Routine' : name === 'First Light' ? 'First Companion' : name,
   );
-  const creatures = raw.creatures?.length ? raw.creatures : [starterCreature(raw.species, raw.creatureName, raw.needs?.bond ?? 81)];
+  const baseCreatures = raw.creatures?.length ? raw.creatures : [starterCreature(raw.species, raw.creatureName, raw.needs?.bond ?? 81)];
+  const now = Date.now();
+  const creatures = baseCreatures.map((creature) => ({
+    ...creature,
+    stats: creature.stats ?? (creature.species === 'mosskit' ? { tracking: 82, agility: 60, resolve: 55 } : creature.species === 'galecrest' ? { tracking: 55, agility: 88, resolve: 50 } : starterCreature(raw.species, raw.creatureName).stats),
+    energy: creature.energy ?? (creature.id === raw.activeCreatureId ? raw.needs?.energy ?? 64 : 100),
+    maxEnergy: creature.maxEnergy ?? 100,
+    energyUpdatedAt: creature.energyUpdatedAt ?? now,
+  }));
   const discoveries: GameState['discoveries'] = raw.discoveries?.length ? [...raw.discoveries] : ['mosskit'];
   if (creatures.some((creature) => creature.species === 'mosskit') && !discoveries.includes('galecrest')) discoveries.push('galecrest');
-  return {
+  return recoverState({
     ...raw,
     inventory: seedItems.map((seed) => ({ ...seed, quantity: existing.get(seed.id)?.quantity ?? seed.quantity })),
     equipped: raw.equipped ?? [],
@@ -74,7 +82,7 @@ export function migrateGameState(raw: GameState): GameState {
     discoveries,
     encounterProgress: raw.encounterProgress ?? { mosskit: 0 },
     lastAction: raw.lastAction?.replace(/glow/gi, 'quest').replace(/Glimmer/gi, 'creature') ?? 'Field record updated.',
-  };
+  }, now);
 }
 
 export function watchGameState(
