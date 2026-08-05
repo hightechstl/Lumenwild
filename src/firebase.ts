@@ -62,6 +62,8 @@ export function migrateGameState(raw: GameState): GameState {
     name === 'A Little Brighter' ? 'Field Routine' : name === 'First Light' ? 'First Companion' : name,
   );
   const creatures = raw.creatures?.length ? raw.creatures : [starterCreature(raw.species, raw.creatureName, raw.needs?.bond ?? 81)];
+  const discoveries: GameState['discoveries'] = raw.discoveries?.length ? [...raw.discoveries] : ['mosskit'];
+  if (creatures.some((creature) => creature.species === 'mosskit') && !discoveries.includes('galecrest')) discoveries.push('galecrest');
   return {
     ...raw,
     inventory: seedItems.map((seed) => ({ ...seed, quantity: existing.get(seed.id)?.quantity ?? seed.quantity })),
@@ -69,7 +71,7 @@ export function migrateGameState(raw: GameState): GameState {
     achievements: [...new Set(achievements)],
     creatures,
     activeCreatureId: creatures.some((creature) => creature.id === raw.activeCreatureId) ? raw.activeCreatureId : creatures[0].id,
-    discoveries: raw.discoveries?.length ? raw.discoveries : ['mosskit'],
+    discoveries,
     encounterProgress: raw.encounterProgress ?? { mosskit: 0 },
     lastAction: raw.lastAction?.replace(/glow/gi, 'quest').replace(/Glimmer/gi, 'creature') ?? 'Field record updated.',
   };
