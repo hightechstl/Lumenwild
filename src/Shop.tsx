@@ -19,7 +19,7 @@ export function Shop({ state, act }: { state: GameState; act: (state: GameState)
   const [selectedVendor, setSelectedVendor] = useState(0);
   const vendor = shops[selectedVendor];
   return <section className="page shop-page">
-    <header><p>Bramblewake trading post</p><h1>Shop</h1><span>Spend earned Marks on expedition supplies, equipment, and comforts for your nook.</span></header>
+    <header className="illustrated-page-header market-header"><p>Bramblewake trading post</p><h1>Shop</h1><span>Spend earned Marks on expedition supplies, equipment, and comforts for your nook.</span></header>
     <div className="shops">
       <div className="shop-tabs">{shops.map((entry, index) => <button className={index === selectedVendor ? 'active' : ''} onClick={() => setSelectedVendor(index)} key={entry.name}>{entry.name}</button>)}</div>
       <h2>{vendor.name}</h2><p><b>{vendor.keeper}</b> · “{vendor.line}”</p>

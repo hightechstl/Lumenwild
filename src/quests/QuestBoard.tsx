@@ -21,7 +21,7 @@ export function QuestBoard({state,act}:{state:GameState;act:(next:GameState)=>vo
   const claimed=quests.filter(quest=>questStatus(fresh,quest)==='claimed').length;
   const findTitle=(id?:string)=>quests.find(quest=>quest.instanceId===id||quest.id===id)?.title;
   return <section className="page quest-board">
-    <header><p>Trailkeeper’s dispatch</p><h1>Quest Board</h1><span>Choose short errands, weekly expeditions, regional work, or the unfolding Bramblewake story.</span></header>
+    <header className="illustrated-page-header quest-board-header"><p>Trailkeeper’s dispatch</p><h1>Quest Board</h1><span>Choose short errands, weekly expeditions, regional work, or the unfolding Bramblewake story.</span></header>
     <div className="quest-summary" aria-label="Quest summary">
       <article><b>{claimable}</b><span>Rewards ready</span></article><article><b>{claimed}</b><span>Claimed this cycle</span></article><article><b>{state.questHistory.length}</b><span>Completed overall</span></article>
     </div>
