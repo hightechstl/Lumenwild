@@ -90,3 +90,4 @@
 .auth-notice{background:#e9f4eb;border:1px solid #83a98d;color:#315a3e;padding:10px 12px;border-radius:9px;font-size:14px}.forgot-password{border:0;background:transparent;color:#315a4d;text-decoration:underline;text-underline-offset:3px;padding:3px;font-weight:700;justify-self:center}.forgot-password:disabled{opacity:.55}
 .cloud-save-error{color:#9a4035;font-size:13px}.cloud-save-error svg{width:16px}
 .feedback-link{display:inline-flex;align-items:center;border:1px solid #315949;border-radius:9px;background:#315949;color:#fffaf0;padding:9px 12px;text-decoration:none;font-weight:700}.feedback-link:hover{background:#25483c}
+.field-journal .creature.small img{width:100%!important;height:100%!important;inset:0!important;object-fit:contain!important;object-position:center!important}
