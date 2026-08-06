@@ -23,6 +23,7 @@ import { recoverState, starterCreature } from './game';
 import { seedItems } from './data';
 import {hydrateQuestState} from './quests/questEngine';
 import {hydrateCraftingState} from './crafting/craftingEngine';
+import {hydrateCreature} from './creatures/creatureEngine';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyA2qM0VteyAm0R75I5qfXT7PeBDRXTlWNM',
@@ -60,7 +61,7 @@ export const signOutAccount = () => signOut(auth);
 export const resetPassword = (email: string) => sendPasswordResetEmail(auth, email.trim());
 
 const gameRef = (uid: string) => doc(db, 'players', uid);
-export const CURRENT_SCHEMA_VERSION = 10;
+export const CURRENT_SCHEMA_VERSION = 11;
 export class SaveConflictError extends Error { constructor(){super('This save changed on another device. Your field journal has been refreshed.')} }
 
 export function migrateGameState(raw: GameState): GameState {
@@ -70,13 +71,13 @@ export function migrateGameState(raw: GameState): GameState {
   );
   const baseCreatures = raw.creatures?.length ? raw.creatures : [starterCreature(raw.species, raw.creatureName, raw.needs?.bond ?? 81)];
   const now = Date.now();
-  const creatures = baseCreatures.map((creature) => ({
+  const creatures = baseCreatures.map((creature) => hydrateCreature({
     ...creature,
     stats: creature.stats ?? (creature.species === 'mosskit' ? { tracking: 82, agility: 60, resolve: 55 } : creature.species === 'galecrest' ? { tracking: 55, agility: 88, resolve: 50 } : starterCreature(raw.species, raw.creatureName).stats),
     energy: creature.energy ?? (creature.id === raw.activeCreatureId ? raw.needs?.energy ?? 64 : 100),
     maxEnergy: creature.maxEnergy ?? 100,
     energyUpdatedAt: creature.energyUpdatedAt ?? now,
-  }));
+  } as GameState['creatures'][number]));
   const discoveries: GameState['discoveries'] = raw.discoveries?.length ? [...raw.discoveries] : ['mosskit'];
   if (creatures.some((creature) => creature.species === 'mosskit') && !discoveries.includes('galecrest')) discoveries.push('galecrest');
   return hydrateCraftingState(hydrateQuestState(recoverState({

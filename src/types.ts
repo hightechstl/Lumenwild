@@ -4,7 +4,7 @@ export type WildSpecies='mosskit'|'galecrest'|'cragback'|'emberstride'|'veilfin'
 export type CreatureSpecies=Species|WildSpecies;
 export type CreatureRarity='Common'|'Uncommon'|'Rare'|'Mythic'|'Legendary';
 export interface CreatureStats {tracking:number;agility:number;resolve:number}
-export interface OwnedCreature {id:string;species:CreatureSpecies;name:string;rarity:CreatureRarity;bond:number;origin:string;stats:CreatureStats;energy:number;maxEnergy:number;energyUpdatedAt:number}
+export interface OwnedCreature {id:string;species:CreatureSpecies;name:string;rarity:CreatureRarity;bond:number;origin:string;stats:CreatureStats;energy:number;maxEnergy:number;energyUpdatedAt:number;abilityUsedDate:string;personalQuestClaimed:boolean;unlockedMilestones:string[]}
 export type ItemCategory='food'|'toy'|'book'|'wearable'|'decor'|'supply'|'offering'|'restorative'|'furniture';
 export interface Item {id:string;name:string;category:ItemCategory;icon:string;price:number;description:string;quantity:number}
 export type QuestKind='daily'|'weekly'|'regional'|'story';

@@ -6,8 +6,8 @@ import {materials,recipes} from './craftingData';
 
 const DAY=Date.UTC(2026,4,1,12);
 describe('regional acquisition',()=>{
- it('guarantees Mossfiber even on a zero-Mark forage result',()=>{const state=awardForage(initialState(),0,DAY);expect(state.materials.mossfiber).toBe(1);expect(state.foragePlays).toBe(1)});
- it('adds Soft Moss on later contracts without exceeding the daily cap',()=>{let state=initialState();for(let i=0;i<4;i++)state=awardForage(state,40,DAY);expect(state.materials.mossfiber).toBe(3);expect(state.materials.softmoss).toBe(2)});
+ it('guarantees Mossfiber and applies the Pathfinder forage bonus at zero Marks',()=>{const state=awardForage(initialState(),0,DAY);expect(state.materials.mossfiber).toBe(2);expect(state.foragePlays).toBe(1)});
+ it('adds companion materials without exceeding the three-contract daily cap',()=>{let state=initialState();for(let i=0;i<4;i++)state=awardForage(state,40,DAY);expect(state.materials.mossfiber).toBe(6);expect(state.materials.softmoss).toBe(2)});
  it.each([['mosskit','softmoss'],['galecrest','cloudglass'],['cragback','amberstone'],['old-warden','wardenbark']] as [WildSpecies,string][])('maps a successful %s survey to %s',(species,material)=>{const base=initialState();const date=new Date(DAY).toISOString().slice(0,10);const state=studyEncounter({...base,encounterRotationDate:date,encounterRotation:[species]},species,DAY);expect(state.materials[material]).toBe(1)});
  it('documents at least one acquisition source for every material',()=>expect(materials.every(material=>material.sources.length>0)).toBe(true));
 });
