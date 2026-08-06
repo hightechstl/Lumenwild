@@ -61,7 +61,7 @@ export const signOutAccount = () => signOut(auth);
 export const resetPassword = (email: string) => sendPasswordResetEmail(auth, email.trim());
 
 const gameRef = (uid: string) => doc(db, 'players', uid);
-export const CURRENT_SCHEMA_VERSION = 12;
+export const CURRENT_SCHEMA_VERSION = 13;
 export class SaveConflictError extends Error { constructor(){super('This save changed on another device. Your field journal has been refreshed.')} }
 
 export function migrateGameState(raw: GameState): GameState {
@@ -90,6 +90,8 @@ export function migrateGameState(raw: GameState): GameState {
     cosmetics: raw.cosmetics ?? [],
     questRecords: raw.questRecords ?? {},
     questHistory: raw.questHistory ?? [],
+    encounterHistory: Array.isArray(raw.encounterHistory) ? raw.encounterHistory.slice(-300) : [],
+    claimedAchievementTiers: Array.isArray(raw.claimedAchievementTiers) ? [...new Set(raw.claimedAchievementTiers)] : [],
     inventory: seedItems.map((seed) => ({ ...seed, quantity: existing.get(seed.id)?.quantity ?? seed.quantity })),
     equipped: raw.equipped ?? [],
     achievements: [...new Set(achievements)],
