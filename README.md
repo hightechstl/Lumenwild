@@ -15,7 +15,7 @@ npm install
 npm run dev
 ```
 
-Open the local address shown by Vite. Accounts and game data persist in Firebase rather than local browser storage. Run `npm test` for game-rule tests and `npm run build` for a production build.
+Open the local address shown by Vite. Accounts and game data persist in Firebase rather than local browser storage. Run `pnpm test` for game-rule tests and `pnpm run verify` for the complete production gate.
 
 Complete the one-time Firebase Console steps in [docs/FIREBASE_SETUP.md](docs/FIREBASE_SETUP.md) before creating the first account.
 
@@ -35,8 +35,8 @@ Authentication and cloud persistence are live Firebase integrations. The current
 
 ## Playtest diagnostics
 
-The game version is displayed beside the Lumenwild mark. Add `?diagnostics` to the URL to log the game version, Firebase schema version, build mode, and browser online state without exposing account data. Player documents migrate in place; schema 10 retains transactional revision/action-receipt protection and adds recipe and material discoveries while preserving all Phase 2 quest records, regional quantities, inventory, and earned cosmetics.
+The game version is displayed beside the Lumenwild mark. Add `?diagnostics` to the URL to log the game version, Firebase schema version, build mode, and browser online state without exposing account data. Player documents migrate in place; schema 13 retains transactional revision/action-receipt protection and adds encounter history plus one-time achievement claims while preserving creatures, quest records, regional quantities, inventory, and earned cosmetics.
 
 ## Intentionally deferred
 
-Server-authoritative economy validation, player trading, PvE challenges, additional regions/species, crafting, gardening, social features, seasonal events, native apps, and real premium-currency purchase flows.
+Server-authoritative economy validation, player trading, unrestricted chat, native apps, and real premium-currency purchase flows.
