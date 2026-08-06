@@ -9,5 +9,11 @@ export const seedItems:Item[]=[
  {id:'primer',name:'Moonleaf Primer',category:'book',icon:'📗',price:45,description:'Field notes for curious creatures.',quantity:0},
  {id:'beret',name:'Acorn Beret',category:'wearable',icon:'🌰',price:90,description:'A jaunty cap, stitched from fallen leaves.',quantity:0},
  {id:'lamp',name:'Firefly Lantern',category:'decor',icon:'🏮',price:120,description:'A warm light for the coziest nook.',quantity:0},
- {id:'tea',name:'Sunpetal Tea',category:'food',icon:'🍵',price:28,description:'A mellow restorative brew.',quantity:0}];
+ {id:'tea',name:'Sunpetal Tea',category:'food',icon:'🍵',price:28,description:'A mellow restorative brew.',quantity:0},
+ {id:'trail-kit',name:'Mossmere Trail Kit',category:'supply',icon:'🎒',price:0,description:'A crafted field kit that restores companion Energy.',quantity:0},
+ {id:'brightroot-tonic',name:'Brightroot Tonic',category:'restorative',icon:'🧪',price:0,description:'A warming tonic for Energy and Health.',quantity:0},
+ {id:'mossberry-offering',name:'Mossberry Offering',category:'offering',icon:'🫐',price:0,description:'A patient gesture welcomed by shy woodland creatures.',quantity:0},
+ {id:'reedweave-cushion',name:'Reedweave Cushion',category:'furniture',icon:'🧶',price:0,description:'Cloudfen reeds woven into a soft nook cushion.',quantity:0},
+ {id:'wayfinder-mantle',name:'Wayfinder Mantle',category:'wearable',icon:'🧣',price:0,description:'A weatherwise mantle stitched for long expeditions.',quantity:0},
+ {id:'warden-compass',name:'Warden Compass',category:'supply',icon:'🧭',price:0,description:'A shard-tuned compass for the oldest trails.',quantity:0}];
 export const shops=[{name:'The Forage Fold',keeper:'Mira Thistledown',line:'Freshly gathered, fairly traded.',items:['tart','tea','primer']},{name:'Nook & Notion',keeper:'Orrin Wren',line:'Little wonders for lived-in rooms.',items:['bell','beret','lamp']}];

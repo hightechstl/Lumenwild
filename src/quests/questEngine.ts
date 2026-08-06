@@ -47,7 +47,8 @@ export function recordQuestEvent(state:GameState,event:QuestEvent,amount=1,now=D
 function applyReward(state:GameState,reward:QuestReward){
   const inventory=state.inventory.map(item=>({...item,quantity:item.quantity+(reward.items?.[item.id]??0)}));
   const materials={...state.materials};for(const [id,quantity] of Object.entries(reward.materials??{}))materials[id]=(materials[id]??0)+(quantity??0);
-  return {...state,dewdrops:state.dewdrops+(reward.marks??0),starpetals:state.starpetals+(reward.relicShards??0),inventory,materials,cosmetics:reward.cosmetic?[...new Set([...state.cosmetics,reward.cosmetic])]:state.cosmetics};
+  const discoveredMaterials=[...new Set([...(state.discoveredMaterials??[]),...Object.keys(reward.materials??{})])];
+  return {...state,dewdrops:state.dewdrops+(reward.marks??0),starpetals:state.starpetals+(reward.relicShards??0),inventory,materials,discoveredMaterials,cosmetics:reward.cosmetic?[...new Set([...state.cosmetics,reward.cosmetic])]:state.cosmetics};
 }
 
 export function claimQuest(state:GameState,instanceId:string,now=Date.now()):GameState{
