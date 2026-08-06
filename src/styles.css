@@ -91,5 +91,7 @@
 .cloud-save-error{color:#9a4035;font-size:13px}.cloud-save-error svg{width:16px}
 .feedback-link{display:inline-flex;align-items:center;border:1px solid #315949;border-radius:9px;background:#315949;color:#fffaf0;padding:9px 12px;text-decoration:none;font-weight:700}.feedback-link:hover{background:#25483c}
 .field-journal .creature.small img{width:100%!important;height:100%!important;inset:0!important;object-fit:contain!important;object-position:center!important}
+.game-version{display:block;font:600 8px 'DM Sans',system-ui,sans-serif;letter-spacing:.03em;color:#7d735f;margin:2px 0 0 31px;white-space:nowrap}.game-modal button:focus-visible,button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #e4b94f;outline-offset:3px}.cloud-loading{min-height:100vh}.empty-state{padding:18px;border:1px dashed #aa956b;border-radius:9px;color:#6f6555}
+@media(max-width:900px){.game-version{display:none}.mobile-nav{overflow-x:auto;grid-template-columns:repeat(7,minmax(58px,1fr));scrollbar-width:thin}}
 .explore>.shops{display:none}.shop-page .shops{margin-top:0}.species-catalog .undiscovered img,.field-creature:has(.encounter-locked) .wild-art{filter:blur(12px) brightness(.2) saturate(.35);transform:scale(1.08)}
 @media(max-width:900px){.mobile-nav{grid-template-columns:repeat(7,1fr)}.mobile-nav small{font-size:8px}}

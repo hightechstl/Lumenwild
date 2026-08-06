@@ -33,6 +33,10 @@ Choose a creature → care for it → explore Mossmere → play Skyhop or comple
 
 Authentication and cloud persistence are live Firebase integrations. The current public playtest has no real-money purchases, trading, competitive leaderboards, or transferable-value economy. Before adding any of those systems, currency and inventory mutations must move behind authenticated, server-authoritative Callable Functions and an append-only transaction ledger.
 
+## Playtest diagnostics
+
+The game version is displayed beside the Lumenwild mark. Add `?diagnostics` to the URL to log the game version, Firebase schema version, build mode, and browser online state without exposing account data. Player documents migrate in place; schema 8 adds a monotonic save revision and a bounded list of recent action receipts for transactional duplicate/conflict protection.
+
 ## Intentionally deferred
 
 Server-authoritative economy validation, player trading, PvE challenges, additional regions/species, crafting, gardening, social features, seasonal events, native apps, and real premium-currency purchase flows.

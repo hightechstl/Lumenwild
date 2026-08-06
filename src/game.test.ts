@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {befriendCragback,befriendGalecrest,befriendLateCreature,befriendMosskit,ENERGY_REGEN_MS,encounterAvailability,encounterTuning,initialState,care,buy,claimDaily,missEncounter,recoverState,refreshExpeditionState,selectCreature,studyEncounter} from './game';
+import {awardForage,befriendCragback,befriendGalecrest,befriendLateCreature,befriendMosskit,ENERGY_REGEN_MS,encounterAvailability,encounterTuning,initialState,care,buy,claimDaily,missEncounter,recoverState,refreshExpeditionState,selectCreature,studyEncounter} from './game';
 import type {GameState,WildSpecies} from './types';
 
 const DAY=Date.UTC(2026,0,1,12);
@@ -11,7 +11,14 @@ describe('economy and care rules',()=>{
   it('pays daily once',()=>{let s={...initialState(),dailyCare:3};s=claimDaily(s);const once=s.dewdrops;expect(claimDaily(s).dewdrops).toBe(once)});
   it('starts a new account with 250 Marks',()=>expect(initialState().dewdrops).toBe(250));
   it('starts a new account with an empty inventory',()=>expect(initialState().inventory.every(item=>item.quantity===0)).toBe(true));
+  it('charges the exact price and adds exactly one purchased item',()=>{const s=buy(initialState(),'tart');expect(s.dewdrops).toBe(215);expect(s.inventory.find(item=>item.id==='tart')?.quantity).toBe(1)});
+  it('ignores unknown purchase identifiers',()=>expect(buy(initialState(),'missing')).toMatchObject({dewdrops:250}));
   it('resets the daily care quest on a new calendar day',()=>{let s=initialState();for(let i=0;i<3;i++)s=care(s,'feed',DAY);s=claimDaily(s,DAY);expect(s.claimed).toBe(true);const tomorrow=refreshExpeditionState(s,DAY+86_400_000);expect(tomorrow.dailyCare).toBe(0);expect(tomorrow.claimed).toBe(false)});
+});
+
+describe('daily activity limits',()=>{
+  it('pays at most three forage contracts per day',()=>{let s=initialState();for(let i=0;i<5;i++)s=awardForage(s,50,DAY);expect(s.foragePlays).toBe(3);expect(s.dewdrops).toBe(400)});
+  it('resets forage contracts on the next day',()=>{let s=awardForage(initialState(),50,DAY);s=awardForage(s,50,DAY+86_400_000);expect(s.foragePlays).toBe(1);expect(s.dewdrops).toBe(350)});
 });
 
 describe('multi-day randomized expeditions',()=>{
@@ -32,6 +39,7 @@ describe('creature roster',()=>{
 describe('full progression costs',()=>{
   it('requires four Galecrest field days and Cloudfen supplies',()=>{let s={...initialState(),dewdrops:1000,creatures:initialState().creatures.map(x=>({...x,energy:1000,maxEnergy:1000})),inventory:initialState().inventory.map(x=>x.id==='tea'?{...x,quantity:2}:x)};s=surveyDays(s,'galecrest',4);s=befriendGalecrest(s);expect(s.creatures.map(x=>x.species)).toContain('galecrest');expect(s.dewdrops).toBe(500)});
   it('supports every later multi-day encounter',()=>{let s={...initialState(),dewdrops:10000,creatures:initialState().creatures.map(x=>({...x,energy:3000,maxEnergy:3000})),inventory:initialState().inventory.map(x=>({...x,quantity:10}))};s=befriendCragback(surveyDays(s,'cragback',5));s=befriendLateCreature(surveyDays(s,'emberstride',5),'emberstride');s=befriendLateCreature(surveyDays(s,'veilfin',6),'veilfin');s=befriendLateCreature(surveyDays(s,'old-warden',7),'old-warden');expect(s.creatures.map(x=>x.species)).toEqual(expect.arrayContaining(['cragback','emberstride','veilfin','old-warden']))});
+  it('has no permanent economy dead end because forage always pays nonnegative earned Marks',()=>{const s=awardForage({...initialState(),dewdrops:0},96,DAY);expect(s.dewdrops).toBe(96);expect(s.foragePlays).toBe(1)});
 });
 
 describe('per-creature energy and attributes',()=>{

@@ -15,6 +15,7 @@ import {
   getFirestore,
   onSnapshot,
   serverTimestamp,
+  runTransaction,
   setDoc,
 } from 'firebase/firestore';
 import type { GameState } from './types';
@@ -57,7 +58,8 @@ export const signOutAccount = () => signOut(auth);
 export const resetPassword = (email: string) => sendPasswordResetEmail(auth, email.trim());
 
 const gameRef = (uid: string) => doc(db, 'players', uid);
-const CURRENT_SCHEMA_VERSION = 7;
+export const CURRENT_SCHEMA_VERSION = 8;
+export class SaveConflictError extends Error { constructor(){super('This save changed on another device. Your field journal has been refreshed.')} }
 
 export function migrateGameState(raw: GameState): GameState {
   const existing = new Map((raw.inventory ?? []).map((item) => [item.id, item]));
@@ -77,6 +79,8 @@ export function migrateGameState(raw: GameState): GameState {
   if (creatures.some((creature) => creature.species === 'mosskit') && !discoveries.includes('galecrest')) discoveries.push('galecrest');
   return recoverState({
     ...raw,
+    saveRevision: Number.isFinite(raw.saveRevision) ? raw.saveRevision : 0,
+    recentActions: Array.isArray(raw.recentActions) ? raw.recentActions.slice(-30) : [],
     inventory: seedItems.map((seed) => ({ ...seed, quantity: existing.get(seed.id)?.quantity ?? seed.quantity })),
     equipped: raw.equipped ?? [],
     achievements: [...new Set(achievements)],
@@ -117,12 +121,16 @@ export function watchGameState(
   );
 }
 
-export function saveGameState(uid: string, state: GameState) {
-  return setDoc(
-    gameRef(uid),
-    { game: migrateGameState(state), schemaVersion: CURRENT_SCHEMA_VERSION, updatedAt: serverTimestamp() },
-    { merge: true },
-  );
+export function saveGameState(uid: string, state: GameState, actionId: string) {
+  return runTransaction(db, async transaction => {
+    const ref=gameRef(uid);const snapshot=await transaction.get(ref);
+    const remote=snapshot.exists()?migrateGameState(snapshot.data().game as GameState):null;
+    if(remote?.recentActions.includes(actionId))return remote;
+    if(remote&&remote.saveRevision!==state.saveRevision)throw new SaveConflictError();
+    const saved=migrateGameState({...state,saveRevision:(remote?.saveRevision??-1)+1,recentActions:[...(remote?.recentActions??[]),actionId].slice(-30)});
+    transaction.set(ref,{game:saved,schemaVersion:CURRENT_SCHEMA_VERSION,updatedAt:serverTimestamp()},{merge:true});
+    return saved;
+  });
 }
 
 export const deleteGameState = (uid: string) => deleteDoc(gameRef(uid));
