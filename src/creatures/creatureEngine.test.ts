@@ -17,6 +17,6 @@ describe('creature identities and bond progression',()=>{
  it('uses species-specific energy recovery rates',()=>{const now=1_000_000;const spriggle={...starterCreature('spriggle','Pip'),energy:0,energyUpdatedAt:now-240_000};const mallowisp={...starterCreature('mallowisp','Luma'),energy:0,energyUpdatedAt:now-240_000};expect(recoverCreature(spriggle,now).energy).toBe(0);expect(recoverCreature(mallowisp,now).energy).toBe(1)});
 });
 
-describe('schema 13 migration',()=>{
- it('hydrates new progress fields without changing existing economy or bond',()=>{const old=initialState('bramblet','Bram');const raw={...old,creatures:old.creatures.map(({abilityUsedDate:_,personalQuestClaimed:__,unlockedMilestones:___,...creature})=>creature)};const migrated=migrateGameState(raw as typeof old);expect(CURRENT_SCHEMA_VERSION).toBe(13);expect(migrated.creatures[0].bond).toBe(old.creatures[0].bond);expect(migrated.dewdrops).toBe(old.dewdrops);expect(migrated.creatures[0].abilityUsedDate).toBe('');expect(migrated.creatures[0].unlockedMilestones).toContain('bond-75')});
+describe('schema 14 migration',()=>{
+ it('hydrates new progress fields without changing existing economy or bond',()=>{const old=initialState('bramblet','Bram');const raw={...old,creatures:old.creatures.map(({abilityUsedDate:_,personalQuestClaimed:__,unlockedMilestones:___,...creature})=>creature)};const migrated=migrateGameState(raw as typeof old);expect(CURRENT_SCHEMA_VERSION).toBe(14);expect(migrated.creatures[0].bond).toBe(old.creatures[0].bond);expect(migrated.dewdrops).toBe(old.dewdrops);expect(migrated.creatures[0].abilityUsedDate).toBe('');expect(migrated.creatures[0].unlockedMilestones).toContain('bond-75')});
 });

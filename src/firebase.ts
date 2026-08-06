@@ -24,6 +24,7 @@ import { seedItems } from './data';
 import {hydrateQuestState} from './quests/questEngine';
 import {hydrateCraftingState} from './crafting/craftingEngine';
 import {hydrateCreature} from './creatures/creatureEngine';
+import {hydrateGardenState} from './garden/gardenEngine';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyA2qM0VteyAm0R75I5qfXT7PeBDRXTlWNM',
@@ -61,7 +62,7 @@ export const signOutAccount = () => signOut(auth);
 export const resetPassword = (email: string) => sendPasswordResetEmail(auth, email.trim());
 
 const gameRef = (uid: string) => doc(db, 'players', uid);
-export const CURRENT_SCHEMA_VERSION = 13;
+export const CURRENT_SCHEMA_VERSION = 14;
 export class SaveConflictError extends Error { constructor(){super('This save changed on another device. Your field journal has been refreshed.')} }
 
 export function migrateGameState(raw: GameState): GameState {
@@ -80,7 +81,7 @@ export function migrateGameState(raw: GameState): GameState {
   } as GameState['creatures'][number]));
   const discoveries: GameState['discoveries'] = raw.discoveries?.length ? [...raw.discoveries] : ['mosskit'];
   if (creatures.some((creature) => creature.species === 'mosskit') && !discoveries.includes('galecrest')) discoveries.push('galecrest');
-  return hydrateCraftingState(hydrateQuestState(recoverState({
+  return hydrateGardenState(hydrateCraftingState(hydrateQuestState(recoverState({
     ...raw,
     saveRevision: Number.isFinite(raw.saveRevision) ? raw.saveRevision : 0,
     recentActions: Array.isArray(raw.recentActions) ? raw.recentActions.slice(-30) : [],
@@ -113,8 +114,14 @@ export function migrateGameState(raw: GameState): GameState {
     glassrootGatherPlays: raw.glassrootGatherPlays ?? 0,
     glassrootWeatherDate: raw.glassrootWeatherDate ?? '',
     glassrootWeather: raw.glassrootWeather ?? 'clear',
+    gardenPlots: raw.gardenPlots ?? [],
+    seeds: raw.seeds ?? {},
+    discoveredSeeds: raw.discoveredSeeds ?? [],
+    gardenWeatherDate: raw.gardenWeatherDate ?? '',
+    gardenWeather: raw.gardenWeather ?? 'mild',
+    gardenAssistDate: raw.gardenAssistDate ?? '',
     lastAction: raw.lastAction?.replace(/glow/gi, 'quest').replace(/Glimmer/gi, 'creature') ?? 'Field record updated.',
-  }, now), now));
+  }, now), now)),now);
 }
 
 export function watchGameState(

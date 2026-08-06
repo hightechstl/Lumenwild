@@ -17,6 +17,6 @@ describe('Glassroot Basin progression',()=>{
  it('validates regional vendor purchases without overspending',()=>{const bought=buyBasinSalve({...unlocked(),dewdrops:70});expect(bought.dewdrops).toBe(0);expect(bought.inventory.find(item=>item.id==='basin-salve')?.quantity).toBe(1);expect(buyBasinSalve({...unlocked(),dewdrops:69}).dewdrops).toBe(69)});
 });
 
-describe('schema 13 migration',()=>{
- it('adds basin fields without changing an existing save',()=>{const old=initialState();const raw={...old,glassrootStoryStep:undefined,glassrootGatherDate:undefined,glassrootGatherPlays:undefined,glassrootWeatherDate:undefined,glassrootWeather:undefined};const migrated=migrateGameState(raw as unknown as GameState);expect(CURRENT_SCHEMA_VERSION).toBe(13);expect(migrated.glassrootStoryStep).toBe(0);expect(migrated.dewdrops).toBe(old.dewdrops);expect(migrated.creatures[0].bond).toBe(old.creatures[0].bond)});
+describe('schema 14 migration',()=>{
+ it('adds basin fields without changing an existing save',()=>{const old=initialState();const raw={...old,glassrootStoryStep:undefined,glassrootGatherDate:undefined,glassrootGatherPlays:undefined,glassrootWeatherDate:undefined,glassrootWeather:undefined};const migrated=migrateGameState(raw as unknown as GameState);expect(CURRENT_SCHEMA_VERSION).toBe(14);expect(migrated.glassrootStoryStep).toBe(0);expect(migrated.dewdrops).toBe(old.dewdrops);expect(migrated.creatures[0].bond).toBe(old.creatures[0].bond)});
 });
