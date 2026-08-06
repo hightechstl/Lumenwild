@@ -10,6 +10,7 @@ describe('economy and care rules',()=>{
   it('caps needs',()=>{let s=initialState();for(let i=0;i<10;i++)s=care(s,'feed');expect(s.needs.hunger).toBe(100)});
   it('pays daily once',()=>{let s={...initialState(),dailyCare:3};s=claimDaily(s);const once=s.dewdrops;expect(claimDaily(s).dewdrops).toBe(once)});
   it('starts a new account with 250 Marks',()=>expect(initialState().dewdrops).toBe(250));
+  it('resets the daily care quest on a new calendar day',()=>{let s=initialState();for(let i=0;i<3;i++)s=care(s,'feed',DAY);s=claimDaily(s,DAY);expect(s.claimed).toBe(true);const tomorrow=refreshExpeditionState(s,DAY+86_400_000);expect(tomorrow.dailyCare).toBe(0);expect(tomorrow.claimed).toBe(false)});
 });
 
 describe('multi-day randomized expeditions',()=>{

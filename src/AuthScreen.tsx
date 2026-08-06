@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { ArrowRight, Cloud, Eye, EyeOff, LoaderCircle, Sparkles } from 'lucide-react';
-import { createAccount, signInAccount } from './firebase';
+import { createAccount, resetPassword, signInAccount } from './firebase';
 
 function authMessage(error: unknown) {
   const code = typeof error === 'object' && error && 'code' in error ? String(error.code) : '';
@@ -20,14 +20,34 @@ export function AuthScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
 
   async function submit(event: FormEvent) {
     event.preventDefault();
     setBusy(true);
     setError('');
+    setNotice('');
     try {
       if (mode === 'create') await createAccount(email.trim(), password, name);
       else await signInAccount(email.trim(), password);
+    } catch (reason) {
+      setError(authMessage(reason));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function recoverPassword() {
+    if (!email.trim()) {
+      setError('Enter your email address first.');
+      return;
+    }
+    setBusy(true);
+    setError('');
+    setNotice('');
+    try {
+      await resetPassword(email);
+      setNotice('Password reset email sent. Check your inbox.');
     } catch (reason) {
       setError(authMessage(reason));
     } finally {
@@ -40,7 +60,7 @@ export function AuthScreen() {
       <section className="auth-story">
         <div className="auth-brand"><Sparkles /> Lumenwild</div>
         <div className="auth-copy">
-          <h1>Your little light,<br />wherever you wander.</h1>
+          <h1>Your next expedition,<br />wherever you wander.</h1>
           <p>Raise a creature, explore the Bramblewake wilds, and build a persistent world you can return to on any device.</p>
           <div className="cloud-note"><Cloud /><span><b>Saved with Firebase</b>Your creature, collection, and nook follow your account.</span></div>
         </div>
@@ -59,7 +79,9 @@ export function AuthScreen() {
             <label>Email<input type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" /></label>
             <label>Password<span className="password-field"><input type={showPassword ? 'text' : 'password'} autoComplete={mode === 'create' ? 'new-password' : 'current-password'} minLength={6} required value={password} onChange={(e) => setPassword(e.target.value)} /><button type="button" aria-label={showPassword ? 'Hide password' : 'Show password'} onClick={() => setShowPassword((shown) => !shown)}>{showPassword ? <EyeOff /> : <Eye />}</button></span></label>
             {error ? <div className="auth-error" role="alert">{error}</div> : null}
+            {notice ? <div className="auth-notice" role="status">{notice}</div> : null}
             <button className="auth-submit" disabled={busy}>{busy ? <LoaderCircle className="spin" /> : <>{mode === 'create' ? 'Create account' : 'Sign in'}<ArrowRight /></>}</button>
+            {mode === 'signin' ? <button className="forgot-password" type="button" disabled={busy} onClick={() => void recoverPassword()}>Forgot password?</button> : null}
           </form>
           <small>By continuing, you agree to care kindly for the Lumenwild.</small>
         </div>

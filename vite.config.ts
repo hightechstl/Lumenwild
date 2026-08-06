@@ -5,6 +5,6 @@ export default defineConfig({
   plugins: [react()],
   base: process.env.GITHUB_ACTIONS ? '/Lumenwild/' : '/',
   build: {
-    sourcemap: true,
+    sourcemap: false,
   },
 });

@@ -1,11 +1,11 @@
 import { initializeApp } from 'firebase/app';
-import { getAnalytics, isSupported } from 'firebase/analytics';
 import {
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  sendPasswordResetEmail,
   updateProfile,
   type User,
 } from 'firebase/auth';
@@ -36,7 +36,9 @@ export const auth = getAuth(firebaseApp);
 export const db = getFirestore(firebaseApp);
 
 if (import.meta.env.PROD) {
-  void isSupported().then((supported) => supported && getAnalytics(firebaseApp));
+  void import('firebase/analytics').then(async ({ getAnalytics, isSupported }) => {
+    if (await isSupported()) getAnalytics(firebaseApp);
+  });
 }
 
 export const observeAccount = (listener: (user: User | null) => void) =>
@@ -52,9 +54,10 @@ export const signInAccount = (email: string, password: string) =>
   signInWithEmailAndPassword(auth, email, password);
 
 export const signOutAccount = () => signOut(auth);
+export const resetPassword = (email: string) => sendPasswordResetEmail(auth, email.trim());
 
 const gameRef = (uid: string) => doc(db, 'players', uid);
-const CURRENT_SCHEMA_VERSION = 6;
+const CURRENT_SCHEMA_VERSION = 7;
 
 export function migrateGameState(raw: GameState): GameState {
   const existing = new Map((raw.inventory ?? []).map((item) => [item.id, item]));
@@ -77,6 +80,7 @@ export function migrateGameState(raw: GameState): GameState {
     inventory: seedItems.map((seed) => ({ ...seed, quantity: existing.get(seed.id)?.quantity ?? seed.quantity })),
     equipped: raw.equipped ?? [],
     achievements: [...new Set(achievements)],
+    dailyCareDate: raw.dailyCareDate ?? '',
     creatures,
     activeCreatureId: creatures.some((creature) => creature.id === raw.activeCreatureId) ? raw.activeCreatureId : creatures[0].id,
     discoveries,

@@ -27,12 +27,12 @@ https://hightechstl.github.io/Lumenwild/
 
 Add `hightechstl.github.io` to Firebase Authentication's authorized domains before using accounts on the Pages deployment.
 
-## MVP loop
+## Public playtest loop
 
 Choose a creature → care for it → explore Mossmere → play Skyhop or complete a daily quest → spend Marks → equip an item or decorate the nook → earn an achievement.
 
-Authentication and cloud persistence are live Firebase integrations. Before a public release, currency and inventory mutations must move behind authenticated, server-authoritative Callable Functions and an append-only transaction ledger.
+Authentication and cloud persistence are live Firebase integrations. The current public playtest has no real-money purchases, trading, competitive leaderboards, or transferable-value economy. Before adding any of those systems, currency and inventory mutations must move behind authenticated, server-authoritative Callable Functions and an append-only transaction ledger.
 
 ## Intentionally deferred
 
-Production authentication/database services, server validation, player trading, PvE challenges, additional regions/species, crafting, gardening, social features, seasonal events, native apps, and real premium-currency purchase flows.
+Server-authoritative economy validation, player trading, PvE challenges, additional regions/species, crafting, gardening, social features, seasonal events, native apps, and real premium-currency purchase flows.
