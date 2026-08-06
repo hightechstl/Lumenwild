@@ -10,6 +10,7 @@ describe('economy and care rules',()=>{
   it('caps needs',()=>{let s=initialState();for(let i=0;i<10;i++)s=care(s,'feed');expect(s.needs.hunger).toBe(100)});
   it('pays daily once',()=>{let s={...initialState(),dailyCare:3};s=claimDaily(s);const once=s.dewdrops;expect(claimDaily(s).dewdrops).toBe(once)});
   it('starts a new account with 250 Marks',()=>expect(initialState().dewdrops).toBe(250));
+  it('starts a new account with an empty inventory',()=>expect(initialState().inventory.every(item=>item.quantity===0)).toBe(true));
   it('resets the daily care quest on a new calendar day',()=>{let s=initialState();for(let i=0;i<3;i++)s=care(s,'feed',DAY);s=claimDaily(s,DAY);expect(s.claimed).toBe(true);const tomorrow=refreshExpeditionState(s,DAY+86_400_000);expect(tomorrow.dailyCare).toBe(0);expect(tomorrow.claimed).toBe(false)});
 });
 
@@ -21,10 +22,10 @@ describe('multi-day randomized expeditions',()=>{
 });
 
 describe('creature roster',()=>{
-  it('requires three separate survey days before befriending Mosskit',()=>{let s=surveyDays(initialState(),'mosskit',3);expect(s.encounterDays.mosskit).toHaveLength(3);s=befriendMosskit(s);expect(s.creatures.map(x=>x.species)).toContain('mosskit')});
-  it('consumes the offering and permit fee',()=>{let s=surveyDays(initialState(),'mosskit',3);const marks=s.dewdrops,tarts=s.inventory.find(x=>x.id==='tart')!.quantity;s=befriendMosskit(s);expect(s.dewdrops).toBe(marks-250);expect(s.inventory.find(x=>x.id==='tart')!.quantity).toBe(tarts-1)});
+  it('requires three separate survey days before befriending Mosskit',()=>{let s={...initialState(),dewdrops:285,inventory:initialState().inventory.map(x=>x.id==='tart'?{...x,quantity:1}:x)};s=surveyDays(s,'mosskit',3);expect(s.encounterDays.mosskit).toHaveLength(3);s=befriendMosskit(s);expect(s.creatures.map(x=>x.species)).toContain('mosskit')});
+  it('consumes the purchased offering and permit fee',()=>{let s={...initialState(),dewdrops:285};s=buy(s,'tart');s=surveyDays(s,'mosskit',3);const marks=s.dewdrops,tarts=s.inventory.find(x=>x.id==='tart')!.quantity;s=befriendMosskit(s);expect(s.dewdrops).toBe(marks-250);expect(s.inventory.find(x=>x.id==='tart')!.quantity).toBe(tarts-1)});
   it('blocks surveys when the companion is exhausted',()=>{const base=initialState();const date=new Date(DAY).toISOString().slice(0,10);const s={...base,creatures:base.creatures.map(x=>({...x,energy:11})),needs:{...base.needs,energy:11},encounterRotationDate:date,encounterRotation:['mosskit'] as WildSpecies[]};expect(studyEncounter(s,'mosskit',DAY).encounterProgress.mosskit).toBe(0)});
-  it('never adds the same creature twice',()=>{let s=befriendMosskit(surveyDays(initialState(),'mosskit',3));expect(befriendMosskit(s).creatures).toHaveLength(2)});
+  it('never adds the same creature twice',()=>{let s={...initialState(),dewdrops:285,inventory:initialState().inventory.map(x=>x.id==='tart'?{...x,quantity:1}:x)};s=befriendMosskit(surveyDays(s,'mosskit',3));expect(befriendMosskit(s).creatures).toHaveLength(2)});
   it('only selects an owned creature',()=>expect(selectCreature(initialState(),'missing').activeCreatureId).toBe('starter'));
 });
 
