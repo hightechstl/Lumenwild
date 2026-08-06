@@ -61,7 +61,7 @@ export const signOutAccount = () => signOut(auth);
 export const resetPassword = (email: string) => sendPasswordResetEmail(auth, email.trim());
 
 const gameRef = (uid: string) => doc(db, 'players', uid);
-export const CURRENT_SCHEMA_VERSION = 11;
+export const CURRENT_SCHEMA_VERSION = 12;
 export class SaveConflictError extends Error { constructor(){super('This save changed on another device. Your field journal has been refreshed.')} }
 
 export function migrateGameState(raw: GameState): GameState {
@@ -106,6 +106,11 @@ export function migrateGameState(raw: GameState): GameState {
     fieldDays: raw.fieldDays ?? [],
     forageDate: raw.forageDate ?? '',
     foragePlays: raw.foragePlays ?? 0,
+    glassrootStoryStep: raw.glassrootStoryStep ?? 0,
+    glassrootGatherDate: raw.glassrootGatherDate ?? '',
+    glassrootGatherPlays: raw.glassrootGatherPlays ?? 0,
+    glassrootWeatherDate: raw.glassrootWeatherDate ?? '',
+    glassrootWeather: raw.glassrootWeather ?? 'clear',
     lastAction: raw.lastAction?.replace(/glow/gi, 'quest').replace(/Glimmer/gi, 'creature') ?? 'Field record updated.',
   }, now), now));
 }

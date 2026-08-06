@@ -33,6 +33,6 @@ export function craft(state:GameState,recipeId:string,quantity=1):GameState{
 export function useCraftedItem(state:GameState,itemId:string):GameState{
  const item=state.inventory.find(entry=>entry.id===itemId);if(!item?.quantity)return {...state,lastAction:'That item is not in your satchel.'};
  const companion=activeCreature(state);let energy=companion.energy,health=state.needs.health;
- if(itemId==='trail-kit')energy=Math.min(companion.maxEnergy,energy+20);else if(itemId==='brightroot-tonic'){energy=Math.min(companion.maxEnergy,energy+30);health=Math.min(100,health+15)}else return {...state,lastAction:'That item is used during another field activity.'};
+ if(itemId==='trail-kit')energy=Math.min(companion.maxEnergy,energy+20);else if(itemId==='basin-salve')energy=Math.min(companion.maxEnergy,energy+25);else if(itemId==='brightroot-tonic'){energy=Math.min(companion.maxEnergy,energy+30);health=Math.min(100,health+15)}else return {...state,lastAction:'That item is used during another field activity.'};
  return {...state,needs:{...state.needs,energy,health},creatures:state.creatures.map(creature=>creature.id===companion.id?{...creature,energy,energyUpdatedAt:Date.now()}:creature),inventory:state.inventory.map(entry=>entry.id===itemId?{...entry,quantity:entry.quantity-1}:entry),lastAction:`${companion.name} used ${item.name}.`};
 }

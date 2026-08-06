@@ -5,7 +5,7 @@ import {activateCreatureAbility,claimCreatureQuest,hydrateCreature} from './crea
 import {bondLevel,creatureProfiles} from './creatureData';
 
 describe('creature identities and bond progression',()=>{
- it('defines a complete, distinct field identity for every species',()=>{expect(Object.keys(creatureProfiles)).toHaveLength(9);expect(new Set(Object.values(creatureProfiles).map(profile=>profile.role)).size).toBe(9);expect(new Set(Object.values(creatureProfiles).map(profile=>profile.active.name)).size).toBe(9)});
+ it('defines a complete, distinct field identity for every species',()=>{expect(Object.keys(creatureProfiles)).toHaveLength(14);expect(new Set(Object.values(creatureProfiles).map(profile=>profile.role)).size).toBe(14);expect(new Set(Object.values(creatureProfiles).map(profile=>profile.active.name)).size).toBe(14)});
  it('assigns bond levels at stable milestone thresholds',()=>{expect(bondLevel(24).name).toBe('New Companion');expect(bondLevel(25).name).toBe('Familiar');expect(bondLevel(75).name).toBe('Kindred');expect(bondLevel(100).name).toBe('Lifelong')});
  it('adds preference bond without changing the base care action',()=>{const state=initialState('spriggle');expect(care(state,'read',1).needs.bond).toBe(89);expect(care(state,'groom',1).needs.bond).toBe(86)});
  it('gives specialized companions advantages only in their matching encounters',()=>{const state=initialState('spriggle');const matching=encounterTuning(state,'mosskit');const offRole=encounterTuning(state,'cragback');expect(matching.roleBonus).toBeGreaterThan(0);expect(offRole.roleBonus).toBe(0);expect(matching.score).toBe(matching.rawScore+matching.roleBonus)});
@@ -17,6 +17,6 @@ describe('creature identities and bond progression',()=>{
  it('uses species-specific energy recovery rates',()=>{const now=1_000_000;const spriggle={...starterCreature('spriggle','Pip'),energy:0,energyUpdatedAt:now-240_000};const mallowisp={...starterCreature('mallowisp','Luma'),energy:0,energyUpdatedAt:now-240_000};expect(recoverCreature(spriggle,now).energy).toBe(0);expect(recoverCreature(mallowisp,now).energy).toBe(1)});
 });
 
-describe('schema 11 migration',()=>{
- it('hydrates new progress fields without changing existing economy or bond',()=>{const old=initialState('bramblet','Bram');const raw={...old,creatures:old.creatures.map(({abilityUsedDate:_,personalQuestClaimed:__,unlockedMilestones:___,...creature})=>creature)};const migrated=migrateGameState(raw as typeof old);expect(CURRENT_SCHEMA_VERSION).toBe(11);expect(migrated.creatures[0].bond).toBe(old.creatures[0].bond);expect(migrated.dewdrops).toBe(old.dewdrops);expect(migrated.creatures[0].abilityUsedDate).toBe('');expect(migrated.creatures[0].unlockedMilestones).toContain('bond-75')});
+describe('schema 12 migration',()=>{
+ it('hydrates new progress fields without changing existing economy or bond',()=>{const old=initialState('bramblet','Bram');const raw={...old,creatures:old.creatures.map(({abilityUsedDate:_,personalQuestClaimed:__,unlockedMilestones:___,...creature})=>creature)};const migrated=migrateGameState(raw as typeof old);expect(CURRENT_SCHEMA_VERSION).toBe(12);expect(migrated.creatures[0].bond).toBe(old.creatures[0].bond);expect(migrated.dewdrops).toBe(old.dewdrops);expect(migrated.creatures[0].abilityUsedDate).toBe('');expect(migrated.creatures[0].unlockedMilestones).toContain('bond-75')});
 });

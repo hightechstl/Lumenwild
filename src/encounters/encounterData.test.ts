@@ -5,7 +5,7 @@ import {assistanceLevel,encounterProfiles,encounterRound} from './encounterData'
 
 const DAY=Date.UTC(2026,6,1,12);const species=Object.keys(encounterProfiles) as WildSpecies[];
 describe('encounter template registry',()=>{
- it('assigns all six species across exactly three reusable mechanics',()=>{expect(new Set(species.map(id=>encounterProfiles[id].template))).toEqual(new Set(['timing','observation','route']));expect(species).toHaveLength(6)});
+ it('assigns all eleven species across exactly three reusable mechanics',()=>{expect(new Set(species.map(id=>encounterProfiles[id].template))).toEqual(new Set(['timing','observation','route']));expect(species).toHaveLength(11)});
  it('selects mechanics by species behavior and region',()=>{expect(encounterProfiles.mosskit.template).toBe('observation');expect(encounterProfiles.galecrest.template).toBe('timing');expect(encounterProfiles.cragback.template).toBe('route');expect(encounterProfiles['old-warden'].region).toBe('The Ruins')});
  it('provides deterministic, valid choice rounds for observation and route species',()=>{for(const id of ['mosskit','veilfin','cragback','old-warden'] as WildSpecies[]){const round=encounterRound(id,7)!;expect(round.choices).toHaveLength(3);expect(round.correct).toBeGreaterThanOrEqual(0);expect(round.correct).toBeLessThan(3);expect(encounterRound(id,7)).toEqual(round)}});
  it('uses the intended creature statistic for every mechanic',()=>{expect(encounterProfiles.mosskit.attribute).toBe('tracking');expect(encounterProfiles.galecrest.attribute).toBe('agility');expect(encounterProfiles.cragback.attribute).toBe('resolve')});

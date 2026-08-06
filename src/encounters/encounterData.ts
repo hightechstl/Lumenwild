@@ -10,6 +10,11 @@ export const encounterProfiles:Record<WildSpecies,EncounterProfile>={
  emberstride:{species:'emberstride',name:'Emberstride',region:'Amber Reach',template:'timing',attribute:'agility',difficulty:82,intro:'Match the ridge runner’s pace without crowding its path.',action:'Match the stride'},
  veilfin:{species:'veilfin',name:'Veilfin',region:'Cloudfen',template:'observation',attribute:'tracking',difficulty:86,intro:'Interpret the faint ripples left in the upper cloud current.',action:'Read the current'},
  'old-warden':{species:'old-warden',name:'Old Warden',region:'The Ruins',template:'route',attribute:'resolve',difficulty:92,intro:'Select the respectful path through the guardian stones.',action:'Enter the ruins'},
+ glintmoth:{species:'glintmoth',name:'Glintmoth',region:'Glassroot Basin',template:'observation',attribute:'tracking',difficulty:66,intro:'Trace the newest glints beneath the roots.',action:'Follow the light'},
+ reedstalker:{species:'reedstalker',name:'Reedstalker',region:'Glassroot Basin',template:'route',attribute:'tracking',difficulty:74,intro:'Match its careful posture through the pools.',action:'Read the posture'},
+ flintcap:{species:'flintcap',name:'Flintcap',region:'Glassroot Basin',template:'route',attribute:'resolve',difficulty:80,intro:'Choose a stable channel through shifting silt.',action:'Clear the channel'},
+ prismhart:{species:'prismhart',name:'Prismhart',region:'Glassroot Basin',template:'timing',attribute:'agility',difficulty:88,intro:'Mark the instant four colors cross.',action:'Read the squall'},
+ hollowhorn:{species:'hollowhorn',name:'Hollowhorn',region:'Glassroot Basin',template:'route',attribute:'resolve',difficulty:96,intro:'Restore the root markers before the guardian calls.',action:'Answer the guardian'},
 };
 
 export interface ChoiceRound {prompt:string;choices:string[];correct:number;guidance:string}

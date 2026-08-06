@@ -15,5 +15,10 @@ export const seedItems:Item[]=[
  {id:'mossberry-offering',name:'Mossberry Offering',category:'offering',icon:'🫐',price:0,description:'A patient gesture welcomed by shy woodland creatures.',quantity:0},
  {id:'reedweave-cushion',name:'Reedweave Cushion',category:'furniture',icon:'🧶',price:0,description:'Cloudfen reeds woven into a soft nook cushion.',quantity:0},
  {id:'wayfinder-mantle',name:'Wayfinder Mantle',category:'wearable',icon:'🧣',price:0,description:'A weatherwise mantle stitched for long expeditions.',quantity:0},
- {id:'warden-compass',name:'Warden Compass',category:'supply',icon:'🧭',price:0,description:'A shard-tuned compass for the oldest trails.',quantity:0}];
+ {id:'warden-compass',name:'Warden Compass',category:'supply',icon:'🧭',price:0,description:'A shard-tuned compass for the oldest trails.',quantity:0},
+ {id:'basin-salve',name:'Basin Salve',category:'restorative',icon:'🫙',price:70,description:'A cooling Glassroot remedy that restores expedition Energy.',quantity:0},
+ {id:'rootglass-stool',name:'Rootglass Stool',category:'furniture',icon:'🪑',price:0,description:'A translucent-root seat crafted in Glassroot Basin.',quantity:0},
+ {id:'prism-cloak',name:'Prism-Rain Cloak',category:'wearable',icon:'🌈',price:0,description:'A weatherproof mantle that catches the colors of a prism squall.',quantity:0},
+ {id:'hollowhorn-chime',name:'Hollowhorn Chime',category:'decor',icon:'🎐',price:0,description:'A guardian keepsake that hums before basin storms.',quantity:0}];
+
 export const shops=[{name:'The Forage Fold',keeper:'Mira Thistledown',line:'Freshly gathered, fairly traded.',items:['tart','tea','primer']},{name:'Nook & Notion',keeper:'Orrin Wren',line:'Little wonders for lived-in rooms.',items:['bell','beret','lamp']}];
