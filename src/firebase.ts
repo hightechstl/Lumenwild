@@ -21,6 +21,7 @@ import {
 import type { GameState } from './types';
 import { recoverState, starterCreature } from './game';
 import { seedItems } from './data';
+import {hydrateQuestState} from './quests/questEngine';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyA2qM0VteyAm0R75I5qfXT7PeBDRXTlWNM',
@@ -58,7 +59,7 @@ export const signOutAccount = () => signOut(auth);
 export const resetPassword = (email: string) => sendPasswordResetEmail(auth, email.trim());
 
 const gameRef = (uid: string) => doc(db, 'players', uid);
-export const CURRENT_SCHEMA_VERSION = 8;
+export const CURRENT_SCHEMA_VERSION = 9;
 export class SaveConflictError extends Error { constructor(){super('This save changed on another device. Your field journal has been refreshed.')} }
 
 export function migrateGameState(raw: GameState): GameState {
@@ -77,10 +78,14 @@ export function migrateGameState(raw: GameState): GameState {
   }));
   const discoveries: GameState['discoveries'] = raw.discoveries?.length ? [...raw.discoveries] : ['mosskit'];
   if (creatures.some((creature) => creature.species === 'mosskit') && !discoveries.includes('galecrest')) discoveries.push('galecrest');
-  return recoverState({
+  return hydrateQuestState(recoverState({
     ...raw,
     saveRevision: Number.isFinite(raw.saveRevision) ? raw.saveRevision : 0,
     recentActions: Array.isArray(raw.recentActions) ? raw.recentActions.slice(-30) : [],
+    materials: raw.materials ?? {},
+    cosmetics: raw.cosmetics ?? [],
+    questRecords: raw.questRecords ?? {},
+    questHistory: raw.questHistory ?? [],
     inventory: seedItems.map((seed) => ({ ...seed, quantity: existing.get(seed.id)?.quantity ?? seed.quantity })),
     equipped: raw.equipped ?? [],
     achievements: [...new Set(achievements)],
@@ -98,7 +103,7 @@ export function migrateGameState(raw: GameState): GameState {
     forageDate: raw.forageDate ?? '',
     foragePlays: raw.foragePlays ?? 0,
     lastAction: raw.lastAction?.replace(/glow/gi, 'quest').replace(/Glimmer/gi, 'creature') ?? 'Field record updated.',
-  }, now);
+  }, now), now);
 }
 
 export function watchGameState(

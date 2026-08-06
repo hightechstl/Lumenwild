@@ -35,7 +35,7 @@ Authentication and cloud persistence are live Firebase integrations. The current
 
 ## Playtest diagnostics
 
-The game version is displayed beside the Lumenwild mark. Add `?diagnostics` to the URL to log the game version, Firebase schema version, build mode, and browser online state without exposing account data. Player documents migrate in place; schema 8 adds a monotonic save revision and a bounded list of recent action receipts for transactional duplicate/conflict protection.
+The game version is displayed beside the Lumenwild mark. Add `?diagnostics` to the URL to log the game version, Firebase schema version, build mode, and browser online state without exposing account data. Player documents migrate in place; schema 9 retains transactional revision/action-receipt protection and adds quest records, history, regional material storage, and earned cosmetics.
 
 ## Intentionally deferred
 
