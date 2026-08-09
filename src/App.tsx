@@ -7,6 +7,7 @@ import {EncounterChallenge as AdaptiveSurvey,ForageRunV2,Skyhop} from './encount
 import {CURRENT_SCHEMA_VERSION,deleteGameState, observeAccount, SaveConflictError, saveGameState, signOutAccount, watchGameState} from './firebase';
 import type {User} from 'firebase/auth';
 import {useCraftedItem} from './crafting/craftingEngine';
+import {FirstJourneyGuide} from './FirstJourneyGuide';
 const QuestBoard=lazy(()=>import('./quests/QuestBoard').then(module=>({default:module.QuestBoard})));
 const CraftingPage=lazy(()=>import('./crafting/CraftingPage').then(module=>({default:module.CraftingPage})));
 const CompanionPage=lazy(()=>import('./creatures/CompanionPage').then(module=>({default:module.CompanionPage})));
@@ -65,7 +66,7 @@ export function App(){
     return watchGameState(user.uid,(state)=>{setSaved(state);setLoadingGame(false);setCloudError('')},()=>{setCloudError('We could not load your Firebase save. Check Firestore setup and try again.');setLoadingGame(false)});
   },[user]);
 
-  if((import.meta.env.DEV||location.hostname==='127.0.0.1'||location.hostname==='localhost')&&new URLSearchParams(location.search).has('preview'))return new URLSearchParams(location.search).has('fresh')?<FreshDevelopmentPreview/>:<DevelopmentPreview/>;
+  if((import.meta.env.DEV||location.hostname==='127.0.0.1'||location.hostname==='localhost')&&new URLSearchParams(location.search).has('preview'))return <>{new URLSearchParams(location.search).has('fresh')?<FreshDevelopmentPreview/>:<DevelopmentPreview/>}<FirstJourneyGuide/></>;
 
   if(user===undefined)return <CloudLoading message="Finding your account…"/>;
   if(user===null)return <AuthScreen/>;
@@ -75,5 +76,5 @@ export function App(){
   const commit=(next:GameState)=>{if(savePending.current)return;savePending.current=true;const actionId=crypto.randomUUID();setSaved(next);setCloudError('');void saveGameState(user.uid,{...next,saveRevision:saved?.saveRevision??0},actionId).then(setSaved).catch(error=>{if(error instanceof SaveConflictError){setSaved(saved);setCloudError(error.message)}else setCloudError('Your latest change could not be saved. Please reconnect and try again.')}).finally(()=>{savePending.current=false})};
   const finish=(state:GameState)=>commit({...state,player:user.displayName||'Wanderer'});
   if(!saved)return <Onboarding finish={finish}/>;
-  return <><Shell state={saved} setState={commit} email={user.email||'Firebase account'} cloudError={cloudError||(!online?'Offline — changes will retry when the trail reconnects.':'')} onReset={()=>{void deleteGameState(user.uid).then(()=>setSaved(null)).catch(()=>setCloudError('Your save could not be reset. Please reconnect and try again.'))}}/>{!online&&<div className="offline-banner" role="status">Offline field mode · keep this tab open while Lumenwild reconnects.</div>}</>;
+  return <><Shell state={saved} setState={commit} email={user.email||'Firebase account'} cloudError={cloudError||(!online?'Offline — changes will retry when the trail reconnects.':'')} onReset={()=>{void deleteGameState(user.uid).then(()=>setSaved(null)).catch(()=>setCloudError('Your save could not be reset. Please reconnect and try again.'))}}/><FirstJourneyGuide/>{!online&&<div className="offline-banner" role="status">Offline field mode · keep this tab open while Lumenwild reconnects.</div>}</>;
 }
